@@ -12,10 +12,5 @@ namespace TR.SourceGenerator.DependencyPropertyGen.Sample
 	public partial class SampleControl_Base : Control //must set "partial" keyword
 	{
 		static SampleControl_Base() => DefaultStyleKeyProperty.OverrideMetadata(typeof(SampleControl_Base), new FrameworkPropertyMetadata(typeof(SampleControl_Base)));
-		public SampleControl_Base()
-		{
-			MyText = "abc";
-			MyTextColor = Brushes.White;
-		}
 	}
 }

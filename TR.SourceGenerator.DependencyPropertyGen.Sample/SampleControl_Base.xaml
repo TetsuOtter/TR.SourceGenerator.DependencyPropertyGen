@@ -3,6 +3,9 @@
 										xmlns:local="clr-namespace:TR.SourceGenerator.DependencyPropertyGen.Sample">
 	
 	<Style TargetType="{x:Type local:SampleControl_Base}" x:Key="SampleControl_Base">
+		<Setter Property="MyText" Value="SampleControl_Base"/>
+		<Setter Property="MyTextColor" Value="Blue"/>
+
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type local:SampleControl_Base}">
