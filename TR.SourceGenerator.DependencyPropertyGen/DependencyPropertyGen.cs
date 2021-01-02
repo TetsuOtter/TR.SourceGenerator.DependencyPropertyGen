@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -20,44 +19,49 @@ namespace TR.SourceGenerator
 	[Generator]
 	public class DependencyPropertyGenerator : ISourceGenerator
 	{
-		static readonly Encoding myEncording = Encoding.Default;
+		static readonly Encoding myEncording = Encoding.Unicode;
 
 		public const string attributeName = "DependencyPropertyGenAttribute";
 		public const string attributeName_short = "DependencyPropertyGen";
-		const string attributeFullName = "TR.SourceGenerator.DependencyPropertyGenAttribute";
+		const string attributeNameSpace = "TR.SourceGenerator";
+		const string attributeFullName = attributeNameSpace + "." + attributeName;
 		const string AttributeFileName = attributeFullName;
+		const string attributeArgName_PropName = "PropName";
+		const string attributeArgName_PropType = "PropType";
 		const string attributeArgName_metaD = "MetaDataVarName";
 		const string attributeArgName_hasSetter = "HasSetter";
 		const string attributeArgName_SetterAccessibility = "SetterAccessibility";
-		const string attributeText = @"using System;
-namespace TR.SourceGenerator
-{
+		static readonly string attributeText = @$"using System;
+namespace {attributeNameSpace}
+{{
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-	public sealed class DependencyPropertyGenAttribute : Attribute
-	{
-		public DependencyPropertyGenAttribute(Type _type, string _name) => SetProps(_type, _name, string.Empty, true, string.Empty);
-		public DependencyPropertyGenAttribute(Type _type, string _name, bool hasSetter) => SetProps(_type, _name, string.Empty, hasSetter, string.Empty);
-		public DependencyPropertyGenAttribute(Type _type, string _name, string metaDVarName, bool hasSetter = true) => SetProps(_type, _name, metaDVarName, hasSetter, string.Empty);
-		public DependencyPropertyGenAttribute(Type _type, string _name, string metaDVarName, bool hasSetter, string setterAccessibility) => SetProps(_type, _name, metaDVarName, hasSetter, setterAccessibility);
+	public sealed class {attributeName} : Attribute
+	{{
+		public {attributeName}(Type _type, string _name) => SetProps(_type, _name, string.Empty, true, string.Empty);
+		public {attributeName}(Type _type, string _name, bool hasSetter) => SetProps(_type, _name, string.Empty, hasSetter, string.Empty);
+		public {attributeName}(Type _type, string _name, string metaDVarName, bool hasSetter = true) => SetProps(_type, _name, metaDVarName, hasSetter, string.Empty);
+		public {attributeName}(Type _type, string _name, string metaDVarName, bool hasSetter, string setterAccessibility) => SetProps(_type, _name, metaDVarName, hasSetter, setterAccessibility);
 
 		private void SetProps(in Type _type, in string _name, in string metaDVarName, in bool hasSetter, in string setterAccessibility)
-		{ this.PropType = _type; this.PropName = _name; this.MetaDataVarName = metaDVarName; this.HasSetter = hasSetter; this.SetterAccessibility = setterAccessibility; }
+		{{ this.{attributeArgName_PropType} = _type; this.{attributeArgName_PropName} = _name; this.{attributeArgName_metaD} = metaDVarName; this.{attributeArgName_hasSetter} = hasSetter; this.{attributeArgName_SetterAccessibility} = setterAccessibility; }}
 
-		public Type PropType { get; }
-		public string PropName { get; }
-		public bool HasSetter { get; set; } = true;
-		public string SetterAccessibility { get; set; } = string.Empty;
-		public string MetaDataVarName { get; set; } = string.Empty;
-	}
-}";
+		public Type {attributeArgName_PropType} {{ get; }}
+		public string {attributeArgName_PropName} {{ get; }}
+		public bool {attributeArgName_hasSetter} {{ get; set; }}
+		public string {attributeArgName_SetterAccessibility} {{ get; set; }}
+		public string {attributeArgName_metaD} {{ get; set; }}
+	}}
+}}
+";
 		/// <summary>DependencyPropertyGenAttribute SourceText</summary>
-		static SourceText DPGAttributeSourceText { get => SourceText.From(attributeText, myEncording); }//インスタンスの使いまわしは無理っぽい?  パフォーマンスをそこまで気にする必要はないだろうし, 都度生成でいく.
+		//static SourceText DPGAttributeSourceText { get => SourceText.From(attributeText, myEncording); }//インスタンスの使いまわしは無理っぽい?  パフォーマンスをそこまで気にする必要はないだろうし, 都度生成でいく.
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
+			//if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
 
-			context.AddSource(AttributeFileName, DPGAttributeSourceText);
+			//context.AddSource(AttributeFileName, DPGAttributeSourceText);
+			context.AddSource(AttributeFileName, SourceText.From(attributeText, Encoding.UTF8));
 			/*
 			var compilation = context.Compilation.AddSyntaxTrees(
 				CSharpSyntaxTree.ParseText(
