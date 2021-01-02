@@ -16,9 +16,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\App.xaml" Link="App.xaml">
+	  <PackageReference Include="TR.SourceGenerator.DependencyPropertyGen" Version="0.0.1-test4" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ApplicationDefinition Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\App.xaml" Link="App.xaml">
 	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
+	  </ApplicationDefinition>
 	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\MainWindow.xaml" Link="MainWindow.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
