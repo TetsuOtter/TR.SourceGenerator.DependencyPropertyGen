@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace TR.SourceGenerator.DependencyPropertyGen.Sample
 {
@@ -10,6 +11,7 @@ namespace TR.SourceGenerator.DependencyPropertyGen.Sample
 		public MainWindow()
 		{
 			InitializeComponent();
+			Title = System.Reflection.Assembly.GetExecutingAssembly().FullName;
 		}
 	}
 }
