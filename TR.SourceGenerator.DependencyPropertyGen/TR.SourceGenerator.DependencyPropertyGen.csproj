@@ -4,6 +4,7 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<RootNamespace>TR.SourceGenerator</RootNamespace>
 		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
 		<Version>0.0.1-test4</Version>
 	</PropertyGroup>
 	
