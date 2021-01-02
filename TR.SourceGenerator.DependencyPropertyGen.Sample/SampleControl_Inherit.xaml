@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 										xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 										xmlns:local="clr-namespace:TR.SourceGenerator.DependencyPropertyGen.Sample">
-	<Style TargetType="{x:Type local:SampleControl_Inherit}" x:Key="SampleControl_Inherit">
+	<Style TargetType="{x:Type local:SampleControl_Inherit}" x:Key="SampleControl-Inherit">
 		<Setter Property="MyText" Value="SampleControl_Inherit"/>
 		<Setter Property="MyTextColor" Value="Red"/>
 		<Setter Property="FrameBrush" Value="Lime"/>
@@ -17,5 +17,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<Style TargetType="{x:Type local:SampleControl_Inherit}" BasedOn="{StaticResource SampleControl-Inherit}"/>
 
 </ResourceDictionary>
