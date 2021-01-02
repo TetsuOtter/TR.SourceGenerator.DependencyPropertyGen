@@ -11,7 +11,8 @@ namespace TR.SourceGenerator.DependencyPropertyGen.Sample
 		public MainWindow()
 		{
 			InitializeComponent();
-			Title = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+			//Title = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+			Title = ((new TR.SourceGenerator.DependencyPropertyGenAttribute(typeof(int), "abc")) is Attribute).ToString();
 		}
 	}
 }
