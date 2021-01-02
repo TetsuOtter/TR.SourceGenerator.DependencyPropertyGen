@@ -1,9 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- insert it manually
+		
+		OutputItemType="Analyzer" ReferenceOutputAssembly="false"
+		
+		-->
+		<!--IDE上でうまく動作しないため, Assemblyを参照する方式を使用中-->
+		<!--<ProjectReference Include="..\TR.SourceGenerator.DependencyPropertyGen\TR.SourceGenerator.DependencyPropertyGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
+		<Analyzer Include="..\TR.SourceGenerator.DependencyPropertyGen\bin\Debug\netstandard2.0\TR.SourceGenerator.DependencyPropertyGen.dll" />
+	</ItemGroup>
 
 </Project>
