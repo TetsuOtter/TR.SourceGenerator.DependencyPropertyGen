@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,42 +17,38 @@ namespace TR.SourceGenerator
 	//CodeAnalysis ref : https://aonasuzutsuki.hatenablog.jp/entry/2019/05/07/104305
 
 	[Generator]
-	public class DependencyPropertyGen : ISourceGenerator
+	public class DependencyPropertyGenerator : ISourceGenerator
 	{
-		static Encoding myEncording = Encoding.UTF8;
+		static readonly Encoding myEncording = Encoding.Default;
 
 		const string attributeName = "DependencyPropertyGenAttribute";
 		const string attributeFullName = "TR.SourceGenerator.DependencyPropertyGenAttribute";
 		const string attributeArgName_metaD = "metaData";
 		const string attributeArgName_hasSetter = "HasSetter";
 		const string attributeArgName_SetterAccessibility = "SetterAccessibility";
-		const string attributeText = @"
-using System;
+		const string attributeText = @"using System;
 namespace TR.SourceGenerator
 {
-	[AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
-	sealed class DependencyPropertyGenAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+	public sealed class DependencyPropertyGenAttribute : Attribute
 	{
-		public DependencyPropertyGenAttribute(Type _type, string _name) { this.type = _type; this.name = _name; }
+		public DependencyPropertyGenAttribute(Type _type, string _name) { }
 		public bool HasSetter { get; set; } = true;
 		public string SetterAccessibility { get; set; } = string.Empty;
 		public string metaData { get; set; } = string.Empty;
 	}
 }
 ";
-		static SourceText sourceText = SourceText.From(attributeText, myEncording);
-
-		List<string> WrittenCheckList = new List<string>();
+		/// <summary>DependencyPropertyGenAttribute SourceText</summary>
+		static SourceText DPGAttributeSourceText { get => SourceText.From(attributeText, myEncording); }//インスタンスの使いまわしは無理っぽい?  パフォーマンスをそこまで気にする必要はないだろうし, 都度生成でいく.
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			context.AddSource(attributeName, sourceText);
+			if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
 
-			var receiver = context.SyntaxReceiver as SyntaxReceiver;
+			context.AddSource(attributeName, DPGAttributeSourceText);
 
-			if (receiver is null) return;
-
-			var compilation = context.Compilation.AddSyntaxTrees(CSharpSyntaxTree.ParseText(sourceText,
+			var compilation = context.Compilation.AddSyntaxTrees(CSharpSyntaxTree.ParseText(DPGAttributeSourceText,
 				(context.Compilation as CSharpCompilation).SyntaxTrees[0].Options as CSharpParseOptions));
 
 			var attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
@@ -71,22 +68,17 @@ namespace TR.SourceGenerator
 					string typeName = attributeData.ConstructorArguments[0].Value.ToString();
 					string propName = attributeData.ConstructorArguments[1].Value as string;
 
-					string fname = $"{typeSymbol.ToDisplayString()}_{propName}_dependency_prop";
-
-					if (WrittenCheckList.Count > 0 && WrittenCheckList.Find(v => v.Equals(fname)) is not null)//既に出力済み
-						continue;
+					string fname = $"{typeSymbol.ToDisplayString()}_{propName}_dependency_prop";//fname一致でエラーを送出させたい
 
 					string createdSource = GenerateSource(typeSymbol, typeName, propName, attributeData);
 
 					context.AddSource(fname, SourceText.From(createdSource, myEncording));//自動生成コードを追加
-					WrittenCheckList.Add(fname);
 				}
 			}
 		}
 
 		public void Initialize(GeneratorInitializationContext context)
 		{
-			WrittenCheckList.Clear();
 			context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
 		}
 
