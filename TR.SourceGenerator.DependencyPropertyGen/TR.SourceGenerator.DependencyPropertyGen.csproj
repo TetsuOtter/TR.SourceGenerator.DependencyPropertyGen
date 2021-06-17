@@ -22,7 +22,7 @@
 
 	<!--Analyzer packing ref : https://stackoverflow.com/questions/65010453/how-to-pack-a-c-sharp-9-source-generator-and-upload-it-to-the-nuget-->
 	<PropertyGroup>
-		<!--<IncludeBuildOutput>false</IncludeBuildOutput>--><!--use this assembly just as analyzer-->
+		<IncludeBuildOutput>false</IncludeBuildOutput><!--use this assembly just as analyzer-->
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="DependencyPropertyGenAttribute.cs" />
@@ -34,8 +34,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
 	</ItemGroup>
 
 </Project>
