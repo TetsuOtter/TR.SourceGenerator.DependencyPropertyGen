@@ -14,6 +14,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace TR.SourceGenerator
 {
 	//Source Generator ref : https://github.com/RyotaMurohoshi/ValueObjectGenerator
+	//Source Generator ref : https://github.com/dotnet/roslyn-sdk/blob/main/samples/CSharp/SourceGenerators
 	//CodeAnalysis ref : https://aonasuzutsuki.hatenablog.jp/entry/2019/05/07/104305
 
 	[Generator]
@@ -54,24 +55,19 @@ namespace {attributeNameSpace}
 }}
 ";
 		/// <summary>DependencyPropertyGenAttribute SourceText</summary>
-		//static SourceText DPGAttributeSourceText { get => SourceText.From(attributeText, myEncording); }//インスタンスの使いまわしは無理っぽい?  パフォーマンスをそこまで気にする必要はないだろうし, 都度生成でいく.
+		static SourceText DPGAttributeSourceText { get => SourceText.From(attributeText, myEncording); }//インスタンスの使いまわしは無理っぽい?  パフォーマンスをそこまで気にする必要はないだろうし, 都度生成でいく.
+		public void Initialize(GeneratorInitializationContext context)
+		{
+			//初期化終了後にAttributeを実装したファイルを追加する処理を行う設定
+			context.RegisterForPostInitialization((i) => i.AddSource(AttributeFileName, DPGAttributeSourceText));
+
+			context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+		}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
 			//if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
 
-			//context.AddSource(AttributeFileName, DPGAttributeSourceText);
-			context.AddSource(AttributeFileName, SourceText.From(attributeText, Encoding.UTF8));
-			/*
-			var compilation = context.Compilation.AddSyntaxTrees(
-				CSharpSyntaxTree.ParseText(
-					DPGAttributeSourceText,
-					(context.Compilation as CSharpCompilation)?.SyntaxTrees[0].Options as CSharpParseOptions
-				)
-			);//ソース構造にDependencyPropertyGenAttributeを追加したものを取得する
-			if (compilation is null)
-				return;
-			*/
 			/*var compilation = context.Compilation;
 			var attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
 			if (attributeSymbol is null)
@@ -103,12 +99,6 @@ namespace {attributeNameSpace}
 				}
 			}*/
 		}
-
-		public void Initialize(GeneratorInitializationContext context)
-		{
-			context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-		}
-
 
 		static string GenerateSource(ISymbol typeSymbol, in string typeName, in string propName, in AttributeData attributeData)
 		{
@@ -147,30 +137,19 @@ namespace {namespaceName}
 ";
 			}catch(Exception ex)
 			{
-				SyntaxReceiver.Print($"{ex}");
 				return string.Empty;
 			}
 		}
-
-#if DEBUG
-		static DependencyPropertyGenerator()
-		{
-			if (!Debugger.IsAttached)
-				Debugger.Launch();
-			
-		}
-#endif
 	}
 
 
-	internal class SyntaxReceiver : ISyntaxReceiver
+	internal class SyntaxReceiver : ISyntaxContextReceiver
 	{
 		public List<ClassDeclarationSyntax> CandidateClasses { get; } = new List<ClassDeclarationSyntax>();
-		//public SyntaxReceiver() => Print("====================");
-		static public void Print(in string s) => File.AppendAllText(@"D:\SRlog.txt", s + Environment.NewLine);
-		public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+
+		public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
 		{
-			if (syntaxNode is ClassDeclarationSyntax PDS) 
+			if (context.Node is ClassDeclarationSyntax PDS)
 				foreach (var tmp0 in PDS.AttributeLists) 
 					foreach (var tmp1 in tmp0.Attributes)
 						if (Equals(tmp1.Name, DependencyPropertyGenerator.attributeName_short) || Equals(tmp1.Name, DependencyPropertyGenerator.attributeName)) 
