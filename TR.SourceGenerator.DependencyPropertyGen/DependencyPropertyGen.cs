@@ -45,8 +45,8 @@ namespace {attributeNameSpace}
 		private void SetProps(in Type _type, in string _name, in string metaDVarName, in bool hasSetter, in string setterAccessibility)
 		{{ this.{attributeArgName_PropType} = _type; this.{attributeArgName_PropName} = _name; this.{attributeArgName_metaD} = metaDVarName; this.{attributeArgName_hasSetter} = hasSetter; this.{attributeArgName_SetterAccessibility} = setterAccessibility; }}
 
-		public Type {attributeArgName_PropType} {{ get; }}
-		public string {attributeArgName_PropName} {{ get; }}
+		public Type {attributeArgName_PropType} {{ get; set; }}
+		public string {attributeArgName_PropName} {{ get; set; }}
 		public bool {attributeArgName_hasSetter} {{ get; set; }}
 		public string {attributeArgName_SetterAccessibility} {{ get; set; }}
 		public string {attributeArgName_metaD} {{ get; set; }}
