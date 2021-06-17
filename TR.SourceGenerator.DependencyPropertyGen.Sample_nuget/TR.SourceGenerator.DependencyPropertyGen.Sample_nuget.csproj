@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net5.0-windows</TargetFramework>
+		<AssemblyName>TR.SourceGenerator.DependencyPropertyGen.Sample</AssemblyName>
 		<UseWPF>true</UseWPF>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
@@ -16,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="TR.SourceGenerator.DependencyPropertyGen" Version="0.0.1-test4" />
+	  <PackageReference Include="TR.SourceGenerator.DependencyPropertyGen" Version="0.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
