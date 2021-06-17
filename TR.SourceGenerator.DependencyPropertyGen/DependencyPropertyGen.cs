@@ -66,9 +66,9 @@ namespace {attributeNameSpace}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			//if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
+			if (context.SyntaxContextReceiver is not SyntaxReceiver receiver) return;
 
-			/*var compilation = context.Compilation;
+			var compilation = context.Compilation;
 			var attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
 			if (attributeSymbol is null)
 				return;
