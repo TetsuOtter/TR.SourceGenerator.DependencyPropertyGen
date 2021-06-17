@@ -97,7 +97,7 @@ namespace {attributeNameSpace}
 					if (!string.IsNullOrWhiteSpace(createdSource))
 						context.AddSource(fname, SourceText.From(createdSource, myEncording));//自動生成コードを追加
 				}
-			}*/
+			}
 		}
 
 		static string GenerateSource(ISymbol typeSymbol, in string typeName, in string propName, in AttributeData attributeData)
