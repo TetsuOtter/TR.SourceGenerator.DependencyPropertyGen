@@ -152,7 +152,7 @@ namespace {namespaceName}
 			if (context.Node is ClassDeclarationSyntax PDS)
 				foreach (var tmp0 in PDS.AttributeLists) 
 					foreach (var tmp1 in tmp0.Attributes)
-						if (Equals(tmp1.Name, DependencyPropertyGenerator.attributeName_short) || Equals(tmp1.Name, DependencyPropertyGenerator.attributeName)) 
+						if (Equals(tmp1.Name.ToString(), DependencyPropertyGenerator.attributeName_short) || Equals(tmp1.Name.ToString(), DependencyPropertyGenerator.attributeName))
 						{
 							CandidateClasses.Add(PDS);
 							return;
