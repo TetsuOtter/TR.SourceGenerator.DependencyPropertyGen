@@ -1,9 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
-using TR.SourceGenerator;
 
 namespace TR.SourceGenerator.DependencyPropertyGen.Sample
 {

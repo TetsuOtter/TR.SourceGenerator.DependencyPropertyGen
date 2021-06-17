@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -68,12 +64,12 @@ namespace {attributeNameSpace}
 		{
 			if (context.SyntaxContextReceiver is not SyntaxReceiver receiver) return;
 
-			var compilation = context.Compilation;
-			var attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
+			Compilation? compilation = context.Compilation;
+			INamedTypeSymbol? attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
 			if (attributeSymbol is null)
 				return;
 
-			foreach (var candiate in receiver.CandidateClasses)
+			foreach (ClassDeclarationSyntax? candiate in receiver.CandidateClasses)
 			{
 				SemanticModel semModel = compilation.GetSemanticModel(candiate.SyntaxTree);
 				ISymbol? typeSymbol = ModelExtensions.GetDeclaredSymbol(semModel, candiate);
@@ -81,8 +77,7 @@ namespace {attributeNameSpace}
 				if (typeSymbol?.ContainingSymbol.Equals(typeSymbol.ContainingNamespace, SymbolEqualityComparer.Default) is null or false)
 					continue;
 
-				ImmutableArray<AttributeData> attributes = typeSymbol.GetAttributes();
-				foreach (AttributeData attributeData in attributes)
+				foreach (AttributeData attributeData in typeSymbol.GetAttributes())
 				{
 					if (attributeData.AttributeClass?.Equals(attributeSymbol, SymbolEqualityComparer.Default) is null or false)
 						continue;//属性がDependencyPropertyGenAttributeでないなら, SourceをGenerateしない
@@ -102,7 +97,7 @@ namespace {attributeNameSpace}
 
 		static string GenerateSource(ISymbol typeSymbol, in string typeName, in string propName, in AttributeData attributeData)
 		{
-			var metaDataSetting = attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_metaD));
+			KeyValuePair<string, TypedConstant> metaDataSetting = attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_metaD));
 			string metaD = (metaDataSetting.Value.Value as string) ?? string.Empty;
 			metaD = string.IsNullOrWhiteSpace(metaD) ? string.Empty : (", " + metaD);
 
@@ -112,8 +107,8 @@ namespace {attributeNameSpace}
 			bool IsSetterAvailable = false;
 			string setterAccessor = string.Empty;
 
-			IsSetterAvailable = (bool?)attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_hasSetter)).Value.Value ?? true;
-			setterAccessor = (attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_SetterAccessibility)).Value.Value as string) ?? string.Empty;
+			IsSetterAvailable = (bool?)attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_hasSetter).Value.Value ?? true;
+			setterAccessor = (attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_SetterAccessibility).Value.Value as string) ?? string.Empty;
 
 			string setter = string.Empty;
 			if (IsSetterAvailable)
@@ -135,7 +130,7 @@ namespace {namespaceName}
 	}}
 }}
 ";
-			}catch(Exception ex)
+			}catch(Exception)
 			{
 				return string.Empty;
 			}

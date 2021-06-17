@@ -2,7 +2,7 @@
 										xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 										xmlns:local="clr-namespace:TR.SourceGenerator.DependencyPropertyGen.Sample">
 
-	<Style TargetType="{x:Type local:SampleControl_Base}" x:Key="SampleControl-Base">
+	<Style TargetType="{x:Type local:SampleControl_Base}">
 		<Setter Property="MyText" Value="SampleControl_Base"/>
 		<Setter Property="MyTextColor" Value="Blue"/>
 
@@ -15,5 +15,5 @@
 		</Setter>
 	</Style>
 
-	<Style TargetType="{x:Type local:SampleControl_Base}" BasedOn="{StaticResource SampleControl-Base}"/>
+	<Style TargetType="{x:Type local:SampleControl_Base}" BasedOn="{StaticResource {x:Type local:SampleControl_Base}}" x:Key="SampleControl-Base"/>
 </ResourceDictionary>
