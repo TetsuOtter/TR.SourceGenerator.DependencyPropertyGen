@@ -3,9 +3,10 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<RootNamespace>TR.SourceGenerator</RootNamespace>
+		<IsRoslynComponent>true</IsRoslynComponent>
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
-		<Version>0.0.1-test4</Version>
+		<Version>0.0.1</Version>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -20,9 +21,11 @@
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
-	<!--Analyzer packing ref : https://stackoverflow.com/questions/65010453/how-to-pack-a-c-sharp-9-source-generator-and-upload-it-to-the-nuget-->
+	<!--Analyzer packing ref : https://stackoverflow.com/questions/65010453/how-to-pack-a-c-sharp-9-source-generator-and-upload-it-to-the-nuget -->
+	<!--Analyzer packing ref : http://neue.cc/2020/12/15_597.html -->
 	<PropertyGroup>
 		<IncludeBuildOutput>false</IncludeBuildOutput><!--use this assembly just as analyzer-->
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="DependencyPropertyGenAttribute.cs" />
