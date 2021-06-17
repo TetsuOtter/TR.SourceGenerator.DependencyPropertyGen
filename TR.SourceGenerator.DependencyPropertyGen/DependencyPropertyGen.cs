@@ -97,43 +97,71 @@ namespace {attributeNameSpace}
 
 		static string GenerateSource(ISymbol typeSymbol, in string typeName, in string propName, in AttributeData attributeData)
 		{
-			KeyValuePair<string, TypedConstant> metaDataSetting = attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_metaD));
-			string metaD = (metaDataSetting.Value.Value as string) ?? string.Empty;
+			string metaD = attributeData.NamedArguments.SingleOrDefault(kv_pair => (kv_pair.Key == attributeArgName_metaD)).Value.Value as string ?? string.Empty;
+			if (string.IsNullOrWhiteSpace(metaD) && attributeData.ConstructorArguments.Length >= 3)
+				if (attributeData.ConstructorArguments[2].Value is string s)//下手に上と一緒にすると, sのスコープが広くなるため
+					metaD = s;
 			metaD = string.IsNullOrWhiteSpace(metaD) ? string.Empty : (", " + metaD);
 
 			string namespaceName = typeSymbol.ContainingNamespace.ToDisplayString();
 			string className = typeSymbol.ToDisplayString().Split('.').Last();
 
-			bool IsSetterAvailable = false;
-			string setterAccessor = string.Empty;
+			bool? IsSetterAvailable_tmp = (bool?)attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_hasSetter).Value.Value;
+			if (IsSetterAvailable_tmp is null)
+				if (attributeData.ConstructorArguments.Length == 3 && attributeData.ConstructorArguments[2].Value is bool b)
+					IsSetterAvailable_tmp = b;
+				else if (attributeData.ConstructorArguments.Length >= 4 && attributeData.ConstructorArguments[3].Value is bool b2)
+					IsSetterAvailable_tmp = b2;
+			bool IsSetterAvailable = IsSetterAvailable_tmp ?? true;
+			
+			string setterAccessor = (attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_SetterAccessibility).Value.Value as string) ?? string.Empty;
+			if (string.IsNullOrWhiteSpace(setterAccessor) && attributeData.ConstructorArguments.Length == 5)
+				if (attributeData.ConstructorArguments[4].Value is string s)//下手に上と一緒にすると, sのスコープが広くなるため
+					setterAccessor = s;
 
-			IsSetterAvailable = (bool?)attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_hasSetter).Value.Value ?? true;
-			setterAccessor = (attributeData.NamedArguments.SingleOrDefault(kv_pair => kv_pair.Key == attributeArgName_SetterAccessibility).Value.Value as string) ?? string.Empty;
+			StringBuilder ReturnStr = new();
 
-			string setter = string.Empty;
-			if (IsSetterAvailable)
-				setter = $"{setterAccessor} set => SetValue({propName}Property, value);";
-			try
-			{
-				return $@"using System.Windows;
+			ReturnStr.Append(
+$@"using System.Windows;
 namespace {namespaceName}
 {{
 	public partial class {className}
-	{{
-		public static readonly DependencyProperty {propName}Property = DependencyProperty.Register(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});
+	{{\n"
+);
+
+			string DependencyProperty_SetValue_dp = string.Empty;
+			string DependencyPropertyFieldName = $"{propName}Property";
+			if (IsSetterAvailable && setterAccessor != string.Empty)//setterが存在し, かつsetterにアクセス制御子指定があるなら, setterはDependencyPropertyKey経由でsetする
+			{
+				if (metaD == string.Empty)
+					metaD = ", new()";//DependencyProperty.RegisterReadOnlyではmetaDataが必須になるため
+
+				DependencyProperty_SetValue_dp = DependencyProperty_SetValue_dp + "Key";
+				ReturnStr.Append($"\t\tprivate static readonly DependencyPropertyKey {DependencyProperty_SetValue_dp} = DependencyProperty.RegisterReadOnly(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
+				ReturnStr.Append($"\t\tprivate static readonly DependencyProperty {DependencyPropertyFieldName} = {DependencyProperty_SetValue_dp}.DependencyProperty;\n");
+			}
+			else
+			{
+				DependencyProperty_SetValue_dp = DependencyPropertyFieldName;
+				ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = DependencyProperty.Register(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
+			}
+
+			string setter = string.Empty;
+			if (IsSetterAvailable)
+				setter = $"{setterAccessor} set => SetValue({DependencyProperty_SetValue_dp}, value);";//setterに実装する内容
+
+			ReturnStr.Append(//プロパティ実装を行う
+$@"
 
 		public {typeName} {propName}
 		{{
 			get => ({typeName})GetValue({propName}Property);
 			{setter}
 		}}
-	}}
-}}
-";
-			}catch(Exception)
-			{
-				return string.Empty;
-			}
+");
+			ReturnStr.Append("\t}\n}");
+
+			return ReturnStr.ToString();
 		}
 	}
 
