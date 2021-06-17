@@ -12,8 +12,8 @@ namespace TR.SourceGenerator
 		private void SetProps(in Type _type, in string _name, in string metaDVarName, in bool hasSetter, in string setterAccessibility)
 		{ this.PropType = _type; this.PropName = _name; this.MetaDataVarName = metaDVarName; this.HasSetter = hasSetter; this.SetterAccessibility = setterAccessibility; }
 
-		public Type PropType { get; }
-		public string PropName { get; }
+		public Type PropType { get; set; } = typeof(object);
+		public string PropName { get; set; } = string.Empty;
 		public bool HasSetter { get; set; } = true;
 		public string SetterAccessibility { get; set; } = string.Empty;
 		public string MetaDataVarName { get; set; } = string.Empty;
