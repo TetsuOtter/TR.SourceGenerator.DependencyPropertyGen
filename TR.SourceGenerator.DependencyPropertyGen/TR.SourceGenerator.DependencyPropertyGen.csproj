@@ -13,7 +13,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<Authors>Tetsu Otter</Authors>
-		<Description>Add DependencyProperty</Description>
+		<Description>Implement DependencyProperty in your class</Description>
 		<Copyright>Copyright 2021 Tetsu Otter</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/TetsuOtter/TR.SourceGenerator.DependencyPropertyGen</PackageProjectUrl>
@@ -26,6 +26,8 @@
 	<PropertyGroup>
 		<IncludeBuildOutput>false</IncludeBuildOutput><!--use this assembly just as analyzer-->
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<PackageReleaseNotes># 0.0.1
+You can implement DependencyProperty easily with this SourceGenerator.   One Attribute can implement one DependencyProperty</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="DependencyPropertyGenAttribute.cs" />
