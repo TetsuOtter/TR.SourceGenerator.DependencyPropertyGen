@@ -126,7 +126,7 @@ $@"using System.Windows;
 namespace {namespaceName}
 {{
 	public partial class {className}
-	{{\n"
+	{{"+"\n"
 );
 
 			string DependencyProperty_SetValue_dp = string.Empty;
@@ -136,9 +136,9 @@ namespace {namespaceName}
 				if (metaD == string.Empty)
 					metaD = ", new()";//DependencyProperty.RegisterReadOnlyではmetaDataが必須になるため
 
-				DependencyProperty_SetValue_dp = DependencyProperty_SetValue_dp + "Key";
+				DependencyProperty_SetValue_dp = DependencyPropertyFieldName + "Key";
 				ReturnStr.Append($"\t\tprivate static readonly DependencyPropertyKey {DependencyProperty_SetValue_dp} = DependencyProperty.RegisterReadOnly(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
-				ReturnStr.Append($"\t\tprivate static readonly DependencyProperty {DependencyPropertyFieldName} = {DependencyProperty_SetValue_dp}.DependencyProperty;\n");
+				ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = {DependencyProperty_SetValue_dp}.DependencyProperty;\n");
 			}
 			else
 			{
