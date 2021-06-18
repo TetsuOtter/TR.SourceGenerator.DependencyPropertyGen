@@ -1,0 +1,32 @@
+﻿<Window x:Class="TR.SourceGenerator.DependencyPropertyGen.Sample.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:local="clr-namespace:TR.SourceGenerator.DependencyPropertyGen.Sample"
+				mc:Ignorable="d"
+				Title="MainWindow" Height="450" Width="800">
+	<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<Label Content="Default" Grid.Row="0" Grid.Column="1"/>
+		<Label Content="Custom Prop" Grid.Row="0" Grid.Column="2"/>
+
+		<Label Content="SampleControl-Base =>" Grid.Row="1" Grid.Column="0"/>
+		<local:SampleControl_Base Grid.Row="1" Grid.Column="1"/>
+		<local:SampleControl_Base Grid.Row="1" Grid.Column="2" MyText="Custom" MyTextColor="Aqua"/>
+
+		<Label Content="SampleControl-Inherit =>" Grid.Row="2" Grid.Column="0"/>
+		<local:SampleControl_Inherit Grid.Row="2" Grid.Column="1"/>
+		<local:SampleControl_Inherit Grid.Row="2" Grid.Column="2" MyText="Custom_Inherit" MyTextColor="Chocolate" FrameBrush="Magenta" FrameThickness="3"/>
+	</Grid>
+</Window>

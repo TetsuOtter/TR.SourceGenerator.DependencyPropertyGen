@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<AssemblyName>TR.SourceGenerator.DependencyPropertyGen.Sample</AssemblyName>
+		<UseWPF>true</UseWPF>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- insert it manually
+		
+		OutputItemType="Analyzer" ReferenceOutputAssembly="false"
+		
+		-->
+		<!--IDE上でうまく動作しないため, Assemblyを参照する方式を使用中-->
+		<ProjectReference Include="..\TR.SourceGenerator.DependencyPropertyGen\TR.SourceGenerator.DependencyPropertyGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<!--<Analyzer Include="..\TR.SourceGenerator.DependencyPropertyGen\bin\Release\netstandard2.0\TR.SourceGenerator.DependencyPropertyGen.dll" />-->
+	</ItemGroup>
+
+</Project>

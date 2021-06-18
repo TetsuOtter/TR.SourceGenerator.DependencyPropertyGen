@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<AssemblyName>TR.SourceGenerator.DependencyPropertyGen.Sample</AssemblyName>
+		<UseWPF>true</UseWPF>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\App.xaml.cs" Link="App.xaml.cs" />
+	  <Compile Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\AssemblyInfo.cs" Link="AssemblyInfo.cs" />
+	  <Compile Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\MainWindow.xaml.cs" Link="MainWindow.xaml.cs" />
+	  <Compile Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\SampleControl_Base.xaml.cs" Link="SampleControl_Base.xaml.cs" />
+	  <Compile Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\SampleControl_Inherit.xaml.cs" Link="SampleControl_Inherit.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="TR.SourceGenerator.DependencyPropertyGen" Version="0.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ApplicationDefinition Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\App.xaml" Link="App.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </ApplicationDefinition>
+	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\MainWindow.xaml" Link="MainWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\SampleControl_Base.xaml" Link="SampleControl_Base.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\SampleControl_Inherit.xaml" Link="SampleControl_Inherit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="..\TR.SourceGenerator.DependencyPropertyGen.Sample\Themes\Generic.xaml" Link="Themes\Generic.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+
+</Project>

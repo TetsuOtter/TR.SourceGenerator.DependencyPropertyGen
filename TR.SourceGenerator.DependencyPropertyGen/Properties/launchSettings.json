@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TR.SourceGenerator.DependencyPropertyGen": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\TR.SourceGenerator.DependencyPropertyGen.Sample\\TR.SourceGenerator.DependencyPropertyGen.Sample.csproj"
+    }
+  }
+}

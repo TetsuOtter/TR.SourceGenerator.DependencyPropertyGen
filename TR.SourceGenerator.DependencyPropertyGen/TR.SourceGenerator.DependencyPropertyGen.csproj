@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace>TR.SourceGenerator</RootNamespace>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<Version>0.0.1</Version>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Authors>Tetsu Otter</Authors>
+		<Description>Implement DependencyProperty in your class</Description>
+		<Copyright>Copyright 2021 Tetsu Otter</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/TetsuOtter/TR.SourceGenerator.DependencyPropertyGen</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/TetsuOtter/TR.SourceGenerator.DependencyPropertyGen</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<!--Analyzer packing ref : https://stackoverflow.com/questions/65010453/how-to-pack-a-c-sharp-9-source-generator-and-upload-it-to-the-nuget -->
+	<!--Analyzer packing ref : http://neue.cc/2020/12/15_597.html -->
+	<PropertyGroup>
+		<IncludeBuildOutput>false</IncludeBuildOutput><!--use this assembly just as analyzer-->
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<PackageReleaseNotes># 0.0.1
+You can implement DependencyProperty easily with this SourceGenerator.   One Attribute can implement one DependencyProperty</PackageReleaseNotes>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="DependencyPropertyGenAttribute.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="DependencyPropertyGenAttribute.cs" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+	</ItemGroup>
+
+</Project>
