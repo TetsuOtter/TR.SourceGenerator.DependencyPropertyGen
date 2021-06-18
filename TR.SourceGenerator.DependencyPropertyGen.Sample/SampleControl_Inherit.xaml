@@ -6,6 +6,7 @@
 		<Setter Property="MyTextColor" Value="Red"/>
 		<Setter Property="FrameBrush" Value="Lime"/>
 		<Setter Property="FrameThickness" Value="2"/>
+		<!--<Setter Property="MyFontSize" Value="22"/> Cannot change value from here-->
 
 		<Setter Property="Template">
 			<Setter.Value>

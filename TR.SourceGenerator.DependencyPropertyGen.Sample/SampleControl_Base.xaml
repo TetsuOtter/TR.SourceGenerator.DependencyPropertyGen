@@ -5,11 +5,12 @@
 	<Style TargetType="{x:Type local:SampleControl_Base}">
 		<Setter Property="MyText" Value="SampleControl_Base"/>
 		<Setter Property="MyTextColor" Value="Blue"/>
+		<!--<Setter Property="MyFontSize" Value="18"/>Cannot change value from here-->
 
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type local:SampleControl_Base}">
-					<TextBlock Text="{TemplateBinding MyText}" Foreground="{TemplateBinding MyTextColor}"/>
+					<TextBlock Text="{TemplateBinding MyText}" Foreground="{TemplateBinding MyTextColor}" FontSize="{TemplateBinding MyFontSize}"/>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
