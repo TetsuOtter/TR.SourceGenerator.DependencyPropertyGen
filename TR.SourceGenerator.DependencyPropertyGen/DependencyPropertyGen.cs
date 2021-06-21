@@ -79,7 +79,8 @@ namespace {attributeNameSpace}
 				foreach (AttributeData attributeData in typeSymbol.GetAttributes())
 				{
 					if (attributeData.AttributeClass?.Equals(attributeSymbol, SymbolEqualityComparer.Default) is null or false)
-						continue;//属性がDependencyPropertyGenAttributeでないなら, SourceをGenerateしない
+						continue;//属性がDependencyPropertyGenAttributeでないなら, SourceをGenerateしない  DependencyPropertyGenAttribute以外が付いていた時用
+
 					if (attributeData.ConstructorArguments.Length < 2)
 						continue;//ConstructorArgumentsは最低でも2つ必要
 
