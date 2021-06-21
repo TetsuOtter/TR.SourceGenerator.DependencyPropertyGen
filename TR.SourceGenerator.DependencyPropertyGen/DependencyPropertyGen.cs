@@ -68,10 +68,10 @@ namespace {attributeNameSpace}
 			if (attributeSymbol is null)
 				return;
 
-			foreach (ClassDeclarationSyntax? candiate in receiver.CandidateClasses)
+			foreach (ClassDeclarationSyntax? candidateClass in receiver.CandidateClasses)
 			{
-				SemanticModel semModel = compilation.GetSemanticModel(candiate.SyntaxTree);
-				ISymbol? typeSymbol = ModelExtensions.GetDeclaredSymbol(semModel, candiate);
+				SemanticModel semModel = compilation.GetSemanticModel(candidateClass.SyntaxTree);
+				ISymbol? typeSymbol = ModelExtensions.GetDeclaredSymbol(semModel, candidateClass);
 
 				if (typeSymbol?.ContainingSymbol.Equals(typeSymbol.ContainingNamespace, SymbolEqualityComparer.Default) is null or false)
 					continue;
