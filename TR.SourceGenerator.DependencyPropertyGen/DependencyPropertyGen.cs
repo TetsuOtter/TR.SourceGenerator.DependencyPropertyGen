@@ -130,13 +130,13 @@ namespace {namespaceName}
 					metaD = ", new()";//DependencyProperty.RegisterReadOnlyではmetaDataが必須になるため
 
 				DependencyProperty_SetValue_dp = DependencyPropertyFieldName + "Key";
-				ReturnStr.Append($"\t\tprivate static readonly DependencyPropertyKey {DependencyProperty_SetValue_dp} = DependencyProperty.RegisterReadOnly(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
-				ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = {DependencyProperty_SetValue_dp}.DependencyProperty;\n");
+				_ = ReturnStr.Append($"\t\tprivate static readonly DependencyPropertyKey {DependencyProperty_SetValue_dp} = DependencyProperty.RegisterReadOnly(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
+				_ = ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = {DependencyProperty_SetValue_dp}.DependencyProperty;\n");
 			}
 			else
 			{
 				DependencyProperty_SetValue_dp = DependencyPropertyFieldName;
-				ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = DependencyProperty.Register(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
+				_ = ReturnStr.Append($"\t\tpublic static readonly DependencyProperty {DependencyPropertyFieldName} = DependencyProperty.Register(nameof({propName}), typeof({typeName}), typeof({className}) {metaD});\n");
 			}
 
 			_ = ReturnStr.Append(//プロパティ実装を行う
@@ -148,7 +148,7 @@ $@"
 			{setterAccessor} set => SetValue({DependencyProperty_SetValue_dp}, value);
 		}}
 ");
-			ReturnStr.Append("\t}\n}");
+			_ = ReturnStr.Append("\t}\n}");
 
 			return ReturnStr.ToString();
 		}
