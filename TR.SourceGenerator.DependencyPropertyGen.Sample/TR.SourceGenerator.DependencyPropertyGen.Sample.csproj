@@ -8,6 +8,21 @@
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
+	<!--ref : https://www.infoq.com/articles/CSharp-Source-Generator/ -->
+	<!--To check Generation Result-->
+	<PropertyGroup>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>obj\Generated</CompilerGeneratedFilesOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Include="$(ProjectDir)obj\Generated\**\*.cs" Link="Generated\%(FileName)%(Extension)" />
+	</ItemGroup>
+	<Target Name="ClearnGeneratedSources" AfterTargets="Clean">
+		<Exec Command="echo GeneratedSource Clean Begin"/>
+		<Exec Command="del /s *.cs" WorkingDirectory="$(ProjectDir)obj\Generated"/>
+		<Exec Command="echo GeneratedSource Clean Complete"/>
+	</Target>
+
 	<ItemGroup>
 		<!-- insert it manually
 		
