@@ -53,12 +53,15 @@ namespace {attributeNameSpace}
 			//初期化終了後にAttributeを実装したファイルを追加する処理を行う設定
 			context.RegisterForPostInitialization((i) => i.AddSource(AttributeFileName, attributeText));
 
-			context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+			context.RegisterForSyntaxNotifications(() => new SyntaxReceiver() as ISyntaxReceiver);
 		}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			if (context.SyntaxContextReceiver is not SyntaxReceiver receiver) return;
+			SyntaxReceiver receiver;
+			if (context.SyntaxContextReceiver is SyntaxReceiver _creceiver) receiver = _creceiver;
+			else if (context.SyntaxReceiver is SyntaxReceiver _receiver) receiver = _receiver;
+			else return;
 
 			Compilation? compilation = context.Compilation;
 			INamedTypeSymbol? attributeSymbol = compilation.GetTypeByMetadataName(attributeFullName);
@@ -152,14 +155,16 @@ $@"
 	}
 
 
-	internal class SyntaxReceiver : ISyntaxContextReceiver
+	internal class SyntaxReceiver : ISyntaxContextReceiver, ISyntaxReceiver
 	{
 		public List<ClassDeclarationSyntax> CandidateClasses { get; } = new List<ClassDeclarationSyntax>();
 
-		public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
+		public void OnVisitSyntaxNode(GeneratorSyntaxContext context) => OnVisitSyntaxNode(context.Node);
+
+		public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
 		{
-			if (context.Node is ClassDeclarationSyntax PDS)
-				foreach (var tmp0 in PDS.AttributeLists) 
+			if (syntaxNode is ClassDeclarationSyntax PDS)
+				foreach (var tmp0 in PDS.AttributeLists)
 					foreach (var tmp1 in tmp0.Attributes)
 						if (Equals(tmp1.Name.ToString(), DependencyPropertyGenerator.attributeName_short) || Equals(tmp1.Name.ToString(), DependencyPropertyGenerator.attributeName))
 						{
